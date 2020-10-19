@@ -12,7 +12,8 @@ Then simply run
 
 ## Operations
 
-Currently, there're only 3 operators: AND (^), OR (v), XOR (+). There's also a negation operator (-)
+Currently, there're only 3 operators: AND `^`, OR `v`, XOR `+`. There's also a negation operator `-`.
+Variable names can vary all lowercase and uppercase ascis (or even other symbols :D), but of course let alone lowercase `v` cuz that's an operator/
 Write the expression in the correct form (pls), then let the magic works.
 
 ## Example:
