@@ -133,21 +133,25 @@ bool Node::init (string s, Expr *e)
 			e -> addExpr(_s);
 		}
 
-		int i, cur = 0;
-		for (i = 0; i < s.size(); i++)
+		int cur = 0, mxPrior = -1, ind;
+		for (int i = 0; i < s.size(); i++)
 		{
 			if (s[i] == '(')
 				cur++;
 			if (s[i] == ')')
 				cur--;
 			if (isOp(s[i]) && cur == 0)
-				break;
+				if (mxPrior < getPrior(s[i]))
+				{
+					mxPrior = getPrior(s[i]);
+					ind = i;
+				}
 		}
 		Node::l = new Node();
 		Node::r = new Node();
-		Node::l -> init(s.substr(0, i), e);
-		Node::r -> init(s.substr(i + 1), e);
-		Node::op = new Operator(s[i]);
+		Node::l -> init(s.substr(0, ind), e);
+		Node::r -> init(s.substr(ind + 1), e);
+		Node::op = new Operator(s[ind]);
 	}
 	return true;
 }

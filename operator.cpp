@@ -1,6 +1,6 @@
 #include "header.h"
 
-const vector <char> OPS = vector <char> {'^', 'v', '+', '>'};
+const vector <char> OPS = vector <char> {'^', 'v', '+', '>', '~'};
 
 bool isOp (char c)
 {
@@ -8,6 +8,18 @@ bool isOp (char c)
 		if (c == OPS[i])
 			return true;
 	return false;
+}
+
+int getPrior (char c)
+{
+	if (isOp(c))
+	{
+		if (c == '^' || c == 'v' || c == '+')
+			return 0;
+		if (c == '>' || c == '~')
+			return 1;
+	}
+	return -1;
 }
 
 bool AND (bool a, bool b)
@@ -27,7 +39,12 @@ bool XOR (bool a, bool b)
 
 bool IMPLY (bool a, bool b)
 {
-	return 0 ? (a & !b) : 1;
+	return (a & !b) ? 0 : 1;
+}
+
+bool IFF (bool a, bool b)
+{
+	return (a & b) || (!a & !b);
 }
 
 bool Operator::eval (bool a, bool b)
@@ -46,6 +63,9 @@ bool Operator::eval (bool a, bool b)
 			break;
 		case '>':
 			res = IMPLY(a, b);
+			break;
+		case '~':
+			res = IFF(a, b);
 			break;
 		default:
 			res = 1;

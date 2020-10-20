@@ -18,10 +18,7 @@ struct Operator
 };
 
 bool isOp (char c);
-bool AND (bool a, bool b);
-bool OR (bool a, bool b);
-bool XOR (bool a, bool b);
-bool IMPLY (bool a, bool b);
+int getPrior (char c);
 
 //Separator
 struct Node{
