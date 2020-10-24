@@ -4,40 +4,40 @@
 
 bool Expr::getVal (char c)
 {
-	int pos = Expr::findSymbol(c);
+	int pos = findSymbol(c);
 	if (pos == -1)
 	{
 		cout << "[ERROR] Symbol not found!\n";
 		return true;
 	}
 	else
-		return Expr::symbols[pos].second;
+		return symbols[pos].second;
 }
 
 void Expr::addSymbol (char c)
 {
-	if (Expr::findSymbol(c) == -1)
+	if (findSymbol(c) == -1)
 		symbols.push_back(make_pair(c, 0));
 }
 
 int Expr::findSymbol (char c)
 {
-	for (int i = 0; i < Expr::symbols.size(); i++)
-		if (Expr::symbols[i].first == c)
+	for (int i = 0; i < symbols.size(); i++)
+		if (symbols[i].first == c)
 			return i;
 	return -1;
 }
 
 void Expr::addExpr (string s)
 {
-	if (Expr::findExpr(s) == -1 && s.size() > 1)
-		Expr::expr.push_back(pair <string, int> (s, s.size()));
+	if (findExpr(s) == -1 && s.size() > 1)
+		expr.push_back(pair <string, int> (s, s.size()));
 }
 
 int Expr::findExpr (string s)
 {
-	for (int i = 0; i < Expr::expr.size(); i++)
-		if (Expr::expr[i].first == s)
+	for (int i = 0; i < expr.size(); i++)
+		if (expr[i].first == s)
 			return i;
 	return -1;
 }
@@ -49,27 +49,27 @@ bool compSymbols (pair <char, bool> a, pair <char, bool> b)
 
 void Expr::init (string s)
 {
-	Expr::clear();
-	Expr::n = new Node();
-	Expr::n -> init(s, this);
-	sort(Expr::symbols.begin(), Expr::symbols.end(), compSymbols);
+	clear();
+	n = new Node();
+	n -> init(s, this);
+	sort(symbols.begin(), symbols.end(), compSymbols);
 	string tmp;
-	for (int i = 0; i < Expr::symbols.size(); i++)
+	for (int i = 0; i < symbols.size(); i++)
 	{
-		tmp = Expr::symbols[i].first;
-		Expr::expr.push_back(pair <string, int> (tmp, 1));
+		tmp = symbols[i].first;
+		expr.push_back(pair <string, int> (tmp, 1));
 	}
 }
 
 bool Expr::next()
 {
-	int ind = Expr::symbols.size() - 1;
+	int ind = symbols.size() - 1;
 	bool mem = 1;
 	while (ind >= 0 && mem)
 	{
-		if (!Expr::symbols[ind].second)
+		if (!symbols[ind].second)
 			mem = 0;
-		Expr::symbols[ind].second ^= 1;
+		symbols[ind].second ^= 1;
 		ind--;
 	}
 	return !mem;
@@ -82,15 +82,15 @@ bool compExpr (pair <string, int> a, pair <string, int> b)
 
 void Expr::colTitle()
 {
-	sort(Expr::expr.begin(), Expr::expr.end(), compExpr);
+	sort(expr.begin(), expr.end(), compExpr);
 	cout << left;
-	for (int i = 0; i < Expr::expr.size(); i++)
-		cout << "|" << setw(Expr::expr[i].second) << Expr::expr[i].first;
+	for (int i = 0; i < expr.size(); i++)
+		cout << "|" << setw(expr[i].second) << expr[i].first;
 	cout << "\n";
-	for (int i = 0; i < Expr::expr.size(); i++)
+	for (int i = 0; i < expr.size(); i++)
 	{
 		cout << "+";
-		for (int j = 0; j < Expr::expr[i].second; j++)
+		for (int j = 0; j < expr[i].second; j++)
 			cout << "-";
 	}
 	cout << "\n";
@@ -99,13 +99,13 @@ void Expr::colTitle()
 void Expr::show()
 {
 	cout << left;
-	for (int i = 0; i < Expr::expr.size(); i++)
-		cout << "|" << setw(Expr::expr[i].second) << (int)Expr::display[Expr::expr[i].first];
+	for (int i = 0; i < expr.size(); i++)
+		cout << "|" << setw(expr[i].second) << (int)display[expr[i].first];
 	cout << "\n";
-	for (int i = 0; i < Expr::expr.size(); i++)
+	for (int i = 0; i < expr.size(); i++)
 	{
 		cout << "+";
-		for (int j = 0; j < Expr::expr[i].second; j++)
+		for (int j = 0; j < expr[i].second; j++)
 			cout << "-";
 	}
 	cout << "\n";
@@ -113,31 +113,35 @@ void Expr::show()
 
 void Expr::truthTable ()
 {
-	Expr::colTitle();
+	colTitle();
 	do
 	{
-		Expr::n -> calc(this);
-		Expr::show();
-	} while (Expr::next());
+		n -> calc(this);
+		show();
+	} while (next());
 }
 
 void Expr::inspect ()
 {
-	Expr::n -> inspect();
+	n -> inspect();
 }
 
 void Expr::debug ()
 {
 	cout << "Available expressions\n";
-	for (int i = 0; i < Expr::expr.size(); i++)
-		cout << Expr::expr[i].first << " " << Expr::expr[i].second << "\n";
+	for (int i = 0; i < expr.size(); i++)
+		cout << expr[i].first << " " << expr[i].second << "\n";
 }
 
 void Expr::clear ()
 {
-	Expr::n -> clear();
-	delete Expr::n;
-	Expr::symbols.clear();
-	Expr::expr.clear();
-	Expr::display.clear();
-}	
+	n -> ~Node();
+	symbols.clear();
+	expr.clear();
+	display.clear();
+}
+
+Expr::~Expr()
+{
+	clear();
+}

@@ -32,7 +32,7 @@ struct Node{
         bool init (string s, Expr *e);
         bool calc (Expr *e);
         void inspect();
-        void clear();
+        ~Node();
 };
 
 string trim (string s, bool &neg);
@@ -68,4 +68,5 @@ struct Expr
 	void debug();
 	void inspect();
 	void clear();
+	~Expr();
 };

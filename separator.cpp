@@ -101,9 +101,9 @@ bool Node::init (string s, Expr *e)
 {	
 	if (!eval(s))
 		return false;
-	s = trim(s, Node::neg);
+	s = trim(s, neg);
 	
-	Node::expr = s;
+	expr = s;
 	if ((e -> display.find(s)) == (e -> display.end()))
 		e -> display.insert(pair <string, bool> (s, 0));
 	e -> addExpr(s);
@@ -112,20 +112,20 @@ bool Node::init (string s, Expr *e)
 	{
 		if (s[0] == '-')
 		{
-			Node::neg = !Node::neg;
-			Node::symbol = s[1];
-			Node::expr = s[1];
+			neg = !neg;
+			symbol = s[1];
+			expr = s[1];
 		}
 		else
 		{
-			Node::symbol = s[0];
-			Node::expr = s[0];
+			symbol = s[0];
+			expr = s[0];
 		}
-		e -> addSymbol(Node::symbol);
+		e -> addSymbol(symbol);
 	}
 	else
 	{
-		if (Node::neg)
+		if (neg)
 		{
 			string _s = getNeg(s, 1);
 			if ((e -> display.find(_s)) == (e -> display.end()))
@@ -147,11 +147,11 @@ bool Node::init (string s, Expr *e)
 					ind = i;
 				}
 		}
-		Node::l = new Node();
-		Node::r = new Node();
-		Node::l -> init(s.substr(0, ind), e);
-		Node::r -> init(s.substr(ind + 1), e);
-		Node::op = new Operator(s[ind]);
+		l = new Node();
+		r = new Node();
+		l -> init(s.substr(0, ind), e);
+		r -> init(s.substr(ind + 1), e);
+		op = new Operator(s[ind]);
 	}
 	return true;
 }
@@ -159,48 +159,46 @@ bool Node::init (string s, Expr *e)
 bool Node::calc (Expr *e)
 {
 	bool res;
-	if (Node::l == nullptr)
-		res = e -> getVal(Node::symbol);
+	if (l == nullptr)
+		res = e -> getVal(symbol);
 	else
 	{
-		bool l = Node::l -> calc(e), r = Node::r -> calc(e);
-		res = Node::op -> eval(l, r);
+		bool left = l -> calc(e), right = r -> calc(e);
+		res = op -> eval(left, right);
 	}
-	e -> display[Node::expr] = res;
-	if (Node::neg)
+	e -> display[expr] = res;
+	if (neg)
 	{
 		res = !res;
-		e -> display[getNeg(Node::expr, Node::l != nullptr)] = res;
+		e -> display[getNeg(expr, l != nullptr)] = res;
 	}
 	return res;
 }
 
 void Node::inspect ()
 {
-	cout << Node::neg << " - ";
-	if (Node::symbol != ' ')
-		cout << Node::symbol << " - ";
+	cout << neg << " - ";
+	if (symbol != ' ')
+		cout << symbol << " - ";
 	else
 		cout << "No symbol - ";
-	if (Node::op -> c != ' ')
-		cout << Node::op -> c << "\n";
+	if (op -> c != ' ')
+		cout << op -> c << "\n";
 	else
 		cout << "No operator\n";
-	if (Node::l)
+	if (l)
 	{
-		Node::l -> inspect();
-		Node::r -> inspect();
+		l -> inspect();
+		r -> inspect();
 	}
 }
 
-void Node::clear ()
+Node::~Node ()
 {
-	if (Node::l)
+	if (l)
 	{
-		Node::l -> clear();
-		Node::r -> clear();
-		delete Node::l;
-		delete Node::r;
+		l -> ~Node();
+		r -> ~Node();
 	}
-	delete Node::op;
+	delete op;
 }

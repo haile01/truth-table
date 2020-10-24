@@ -13,6 +13,4 @@ int main()
 		e -> init(s);
 		e -> truthTable();
 	}
-	e -> clear();
-	delete e;
 }
