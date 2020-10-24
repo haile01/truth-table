@@ -49,6 +49,8 @@ bool compSymbols (pair <char, bool> a, pair <char, bool> b)
 
 void Expr::init (string s)
 {
+	Expr::clear();
+	Expr::n = new Node();
 	Expr::n -> init(s, this);
 	sort(Expr::symbols.begin(), Expr::symbols.end(), compSymbols);
 	string tmp;
@@ -136,4 +138,6 @@ void Expr::clear ()
 	Expr::n -> clear();
 	delete Expr::n;
 	Expr::symbols.clear();
+	Expr::expr.clear();
+	Expr::display.clear();
 }	

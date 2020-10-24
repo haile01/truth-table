@@ -44,8 +44,14 @@ struct Expr
 {
 	Node *n;
 	vector < pair <char, bool> > symbols;
+	// first: symbol character
+	// second: current symbol value (true or false)
 	map <string, bool> display;
+	// first: expression
+	// second: current value (true or false)
 	vector < pair <string, int> > expr;
+	// first: expression
+	// second: expression width
 
 	Expr (): n(new Node()) {};
 	void addSymbol (char c);
