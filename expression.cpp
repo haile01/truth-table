@@ -135,7 +135,7 @@ void Expr::debug ()
 
 void Expr::clear ()
 {
-	n -> ~Node();
+	n -> clear();
 	symbols.clear();
 	expr.clear();
 	display.clear();

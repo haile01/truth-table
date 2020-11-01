@@ -32,6 +32,7 @@ struct Node{
         bool init (string s, Expr *e);
         bool calc (Expr *e);
         void inspect();
+	void clear();
         ~Node();
 };
 

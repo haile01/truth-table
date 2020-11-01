@@ -193,12 +193,19 @@ void Node::inspect ()
 	}
 }
 
-Node::~Node ()
+void Node::clear ()
 {
 	if (l)
 	{
-		l -> ~Node();
-		r -> ~Node();
+		l -> clear();
+		r -> clear();
+		delete l;
+		delete r;
 	}
 	delete op;
+}
+
+Node::~Node ()
+{
+	clear();
 }
